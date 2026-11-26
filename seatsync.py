@@ -369,15 +369,16 @@ def free_spot(spot):
 # ------------------------------------------------------------
 #  STAFF OPTIONS
 # ------------------------------------------------------------
+2
 def flag_overdue_spots(spots):
     """
     Look at every spot that is on break. If the student has been away
     longer than the break limit, flag the spot. Return how many spots
     were newly flagged.
 
-    This runs AUTOMATICALLY every time the menu is about to be shown,
-    so a spot is flagged the moment anyone uses the system after the
-    limit has passed. Staff do not have to remember to do it.
+    The flag time is the moment the break limit EXPIRED (break start +
+    break limit). This way the grace
+    period starts on time, even if nobody used the system for a while.
     """
     found_new = 0
     for spot_id in spots:
@@ -385,14 +386,15 @@ def flag_overdue_spots(spots):
         if spot["status"] == "on_break":
             away = minutes_since(spot["break_start"])
             if away > settings["break_limit"]:       # strictly MORE than the limit
+                started = datetime.strptime(spot["break_start"], TIME_FORMAT)
+                expiry = started + timedelta(minutes=settings["break_limit"])
                 spot["status"] = "flagged"
-                spot["flag_time"] = time_to_text(now())
+                spot["flag_time"] = time_to_text(expiry)
                 log_event(spot["student_id"], spot_id, spot["zone"], "flagged")
                 print(f"WARNING: Spot {spot_id} flagged. Student {spot['student_id']} "
                       f"has been away {int(away)} minutes.")
                 found_new += 1
     return found_new
-
 
 def scan_for_abandoned(spots):
     """Staff option: run the check on demand and list all flagged spots."""
@@ -568,7 +570,6 @@ def change_settings():
 #  MAIN PROGRAM
 # ------------------------------------------------------------
 def show_menu():
-    """Print the main menu with all the options."""
     print("\n==============================")
     print("        LRC SEATSYNC")
     print("==============================")
@@ -586,7 +587,6 @@ def show_menu():
 
 
 def main():
-    """Load the spots, then show the menu and run the chosen option until Exit."""
     spots = load_spots()
     if spots is None:
         return                      # file problem: stop safely
