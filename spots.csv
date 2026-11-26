@@ -1,0 +1,9 @@
+spot_id,zone,status,student_id,checkin_time,break_start,flag_time,group_size
+A1,Quiet Zone,free,,,,,
+A2,Quiet Zone,free,,,,,
+A3,Quiet Zone,free,,,,,
+A4,Quiet Zone,free,,,,,
+B1,Group Zone,free,,,,,
+B2,Group Zone,free,,,,,
+B3,Group Zone,free,,,,,
+B4,Group Zone,free,,,,,
