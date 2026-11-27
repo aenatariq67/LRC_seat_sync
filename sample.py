@@ -1,10 +1,6 @@
 # ============================================================
 #  generate_sample_data.py
 #  Creates a FAKE usage_log.csv so the usage report has data to analyse.
-#
-#  IMPORTANT: this data is SIMULATED, not real LRC usage.
-#  Say so clearly in your report (EL Activity 7).
-#
 #  Run this once, before choosing "Usage report" in Seat_Sync.py.
 #  Warning: it replaces any existing usage_log.csv.
 # ============================================================
